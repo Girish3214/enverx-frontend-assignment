@@ -7,7 +7,9 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { Box, TableSortLabel } from "@mui/material";
+import { IconButton, TableSortLabel } from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   transition: "all 1s ease-in-out",
@@ -74,7 +76,7 @@ export default function DataTable(props) {
 
   const visibleRows = React.useMemo(
     () => stableSort(props.data, getComparator(order, orderBy)),
-    [order, orderBy]
+    [order, orderBy, props.data]
   );
 
   return (
@@ -93,6 +95,7 @@ export default function DataTable(props) {
                 </TableSortLabel>
               </StyledTableCell>
             ))}
+            <StyledTableCell>Actions</StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -100,8 +103,18 @@ export default function DataTable(props) {
             <StyledTableRow key={row.description}>
               <StyledTableCell scope="row">{row.description}</StyledTableCell>
               <StyledTableCell>{row.category}</StyledTableCell>
-              <StyledTableCell>{row.date}</StyledTableCell>
+              <StyledTableCell>
+                {new Date(row?.date?.seconds * 1000).toDateString()}
+              </StyledTableCell>
               <StyledTableCell>{row.amount}</StyledTableCell>
+              <StyledTableCell>
+                <IconButton onClick={() => props.onEdit(row)}>
+                  <EditIcon />
+                </IconButton>
+                <IconButton onClick={() => props.onDelete(row.id)}>
+                  <DeleteForeverIcon />
+                </IconButton>
+              </StyledTableCell>
             </StyledTableRow>
           ))}
         </TableBody>

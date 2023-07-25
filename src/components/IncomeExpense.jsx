@@ -1,9 +1,12 @@
 import React from "react";
 import Box from "@mui/material/Box";
 import { Button, Grid, Paper, Typography, useMediaQuery } from "@mui/material";
+import { useSelector } from "react-redux";
+import { convertToIndianCurrency } from "../utils/dateFormat";
 
 export default function IncomeExpense() {
   const matches = useMediaQuery("(max-width:600px)");
+  const { income, remaining, expense } = useSelector((state) => state.expenses);
   return (
     <Box sx={{ p: 2 }}>
       <Grid container spacing={2}>
@@ -18,7 +21,8 @@ export default function IncomeExpense() {
                 alignItems: "center",
               }}
             >
-              Income: 25,000 <Button variant="contained">Edit</Button>
+              Income: ₹ {convertToIndianCurrency(income?.income) ?? 0}
+              <Button variant="contained">Edit</Button>
             </Typography>
           </Paper>
         </Grid>
@@ -35,7 +39,8 @@ export default function IncomeExpense() {
                 flexWrap: "wrap",
               }}
             >
-              Expense: <Box component="p">5,000</Box>
+              Expense:{" "}
+              <Box component="p">₹ {convertToIndianCurrency(expense)}</Box>
             </Typography>
           </Paper>
         </Grid>
@@ -52,7 +57,8 @@ export default function IncomeExpense() {
                 flexWrap: "wrap",
               }}
             >
-              Remaining: <Box component="p">20,000</Box>
+              Remaining:{" "}
+              <Box component="p">₹ {convertToIndianCurrency(remaining)}</Box>
             </Typography>
           </Paper>
         </Grid>

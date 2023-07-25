@@ -1,31 +1,45 @@
 import React, { useState } from "react";
 import Box from "@mui/material/Box";
-import TextField from "@mui/material/TextField";
-import Grid from "@mui/material/Grid";
-import Autocomplete from "@mui/material/Autocomplete";
-import InputAdornment from "@mui/material/InputAdornment";
-import { Button } from "@mui/material";
-import Modal from "./Modal";
 
-const EXPENSES_TYPES = [
-  {
-    label: "Groceries",
-    value: "groceries",
-  },
-  {
-    label: "Rent",
-    value: "rent",
-  },
-  {
-    label: "Travel",
-    value: "travel",
-  },
-];
+import { Button } from "@mui/material";
+import { addExpense } from "../redux/actions/ExpenseAction";
+import { useDispatch } from "react-redux";
+import Form from "./Form";
+
+const INITIAL_DATA = {
+  description: "",
+  amount: "",
+  category: "",
+  date: new Date(),
+};
+
 export default function AddExpenses() {
+  const dispatch = useDispatch();
+
   const [modalOpen, setmodalOpen] = useState(false);
+  const [newExpense, setNewExpense] = useState(INITIAL_DATA);
+
+  const handleInputChange = (event) => {
+    const name = event.target.name;
+    let value = name === "date" ? event.target.valueAsDate : event.target.value;
+    setNewExpense((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleAutoComplete = (name, value) => {
+    setNewExpense((prev) => ({
+      ...prev,
+      [name]: value?.label,
+    }));
+  };
   const handleSubmit = (e) => {
     e.preventDefault();
+    dispatch(addExpense(newExpense));
+    setNewExpense(INITIAL_DATA);
   };
+
   return (
     <>
       <Box sx={{ float: "right" }}>
@@ -37,75 +51,15 @@ export default function AddExpenses() {
           Add Expense
         </Button>
       </Box>
-      <Modal open={modalOpen} setOpen={setmodalOpen}>
-        <Box
-          component="form"
-          onSubmit={handleSubmit}
-          noValidate
-          sx={{ mt: 1, p: 2 }}
-        >
-          <Grid container gap={1}>
-            <Grid item xs={12} md={5}>
-              <TextField
-                label="Description"
-                margin="dense"
-                required
-                fullWidth
-                id="description"
-                name="description"
-                autoComplete="off"
-              />
-            </Grid>
-            <Grid item xs={12} md={5}>
-              <TextField
-                label="Amount"
-                margin="dense"
-                required
-                fullWidth
-                id="amount"
-                name="amount"
-                type="number"
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">₹</InputAdornment>
-                  ),
-                }}
-              />
-            </Grid>
-            <Grid
-              item
-              xs={12}
-              md={5}
-              sx={{ alignItems: "center", display: "flex" }}
-            >
-              <Autocomplete
-                disablePortal
-                id="categories"
-                options={EXPENSES_TYPES}
-                fullWidth
-                renderInput={(params) => (
-                  <TextField {...params} label="Category" />
-                )}
-              />
-            </Grid>
-            <Grid
-              item
-              xs={12}
-              md={5}
-              sx={{ alignItems: "center", display: "flex" }}
-            >
-              <TextField
-                margin="dense"
-                required
-                fullWidth
-                id="amount"
-                name="amount"
-                type="date"
-              />
-            </Grid>
-          </Grid>
-        </Box>
-      </Modal>
+      <Form
+        modalOpen={modalOpen}
+        setmodalOpen={setmodalOpen}
+        expense={newExpense}
+        handleSubmit={handleSubmit}
+        handleInputChange={(e) => handleInputChange(e)}
+        handleAutoComplete={(e, value) => handleAutoComplete(e, value)}
+        button="Add"
+      />
     </>
   );
 }
