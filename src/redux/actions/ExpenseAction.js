@@ -6,11 +6,21 @@ import {
   UPDATE_EXPENSES,
   SET_INCOME,
   GET_INCOME,
+  UPDATE_INCOME,
 } from "./actionTypes";
 
 export const setIncome = (payload) => {
+  console.log(payload);
   return {
     type: SET_INCOME,
+    payload,
+  };
+};
+
+export const updateIncome = (payload) => {
+  console.log(payload);
+  return {
+    type: UPDATE_INCOME,
     payload,
   };
 };

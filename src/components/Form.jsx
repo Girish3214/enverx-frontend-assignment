@@ -27,7 +27,7 @@ const EXPENSES_TYPES = [
 export default function Form({
   expense,
   modalOpen,
-  setmodalOpen,
+  handleClose,
   handleSubmit,
   handleInputChange,
   handleAutoComplete,
@@ -36,7 +36,7 @@ export default function Form({
   return (
     <Modal
       open={modalOpen}
-      setOpen={setmodalOpen}
+      handleClose={handleClose}
       onSubmit={handleSubmit}
       button={button}
     >

@@ -38,6 +38,11 @@ export default function AddExpenses() {
     e.preventDefault();
     dispatch(addExpense(newExpense));
     setNewExpense(INITIAL_DATA);
+    setmodalOpen(false);
+  };
+
+  const handleClose = () => {
+    setmodalOpen(false);
   };
 
   return (
@@ -55,6 +60,7 @@ export default function AddExpenses() {
         modalOpen={modalOpen}
         setmodalOpen={setmodalOpen}
         expense={newExpense}
+        handleClose={handleClose}
         handleSubmit={handleSubmit}
         handleInputChange={(e) => handleInputChange(e)}
         handleAutoComplete={(e, value) => handleAutoComplete(e, value)}

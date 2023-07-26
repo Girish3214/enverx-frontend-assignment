@@ -7,6 +7,7 @@ const INITIAL_DATA = {
   },
   expense: 0,
   remaining: 0,
+  loading: true,
 };
 
 const checkExpense = (data) => {
@@ -18,6 +19,7 @@ export default function ExpenseReducer(state = INITIAL_DATA, action) {
   switch (action.type) {
     case TYPES.SET_EXPENSES:
       const expensesCal = checkExpense(action.payload);
+      console.log("Cls", action.payload, state?.income?.income - expensesCal);
       return {
         ...state,
         expenses: action.payload,
@@ -35,9 +37,15 @@ export default function ExpenseReducer(state = INITIAL_DATA, action) {
       const expensesSoFar = checkExpense(state?.expenses);
       return {
         ...state,
-        income: action.payload,
+        income: action.payload ?? 0,
         expense: expensesSoFar,
-        remaining: action.payload?.income - expensesSoFar,
+        remaining: !action.payload ? 0 : action.payload?.income - expensesSoFar,
+      };
+
+    case TYPES.SET_SPINNER:
+      return {
+        ...state,
+        loading: action.payload,
       };
 
     default:

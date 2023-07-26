@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
-import Box from "@mui/material/Box";
-import DataTable from "./DataTable";
 import { useDispatch, useSelector } from "react-redux";
+import { collection, onSnapshot, query } from "firebase/firestore";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+
+import DataTable from "./DataTable";
 import { deleteExpense, updateExpense } from "../redux/actions/ExpenseAction";
 import Form from "./Form";
-import { collection, onSnapshot, query } from "firebase/firestore";
 import { db } from "../config/firebase";
 import { SET_EXPENSES } from "../redux/actions/actionTypes";
 
@@ -61,14 +63,21 @@ export default function ExpenseList() {
 
   const handleSubmit = () => {
     dispatch(updateExpense(selectedRow));
+    setmodalOpen(false);
+  };
+
+  const handleClose = () => {
+    setmodalOpen(false);
   };
 
   useEffect(() => {
-    const { user } = JSON.parse(sessionStorage.getItem("user"));
+    const userDetails =
+      sessionStorage.getItem("user") &&
+      JSON.parse(sessionStorage.getItem("user"));
 
-    if (user) {
+    if (userDetails?.user) {
       onSnapshot(
-        query(collection(db, "users", user.uid, "expenses")),
+        query(collection(db, "users", userDetails.user.uid, "expenses")),
         (snapshot) => {
           const data = snapshot.docs.map((doc) => ({
             ...doc.data(),
@@ -93,6 +102,20 @@ export default function ExpenseList() {
 
   return (
     <Box sx={{ p: 2 }}>
+      <Typography
+        variant="h5"
+        align="center"
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          gap: 2,
+          justifyContent: "center",
+          flexWrap: "wrap",
+          mb: 2,
+        }}
+      >
+        Expenses List
+      </Typography>
       <DataTable
         data={data}
         header={header}
@@ -103,6 +126,7 @@ export default function ExpenseList() {
       <Form
         modalOpen={modalOpen}
         setmodalOpen={setmodalOpen}
+        handleClose={handleClose}
         expense={selectedRow}
         handleSubmit={handleSubmit}
         handleInputChange={(e) => handleInputChange(e)}

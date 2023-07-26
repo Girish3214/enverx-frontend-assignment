@@ -8,20 +8,17 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 
 export default function Modal(props) {
-  const { children, open, setOpen, onSubmit, button } = props;
-
-  const handleClose = () => {
-    setOpen(false);
-  };
+  const { children, open, handleClose, onSubmit, button, tabName } = props;
 
   const handleAdd = (e) => {
     onSubmit(e);
-    handleClose();
   };
   return (
     <>
       <Dialog open={open} onClose={handleClose} sx={{ minHeight: "400px" }}>
-        <DialogTitle align="center">{button} Expense</DialogTitle>
+        <DialogTitle align="center">
+          {button} {tabName ? tabName : "Expense"}
+        </DialogTitle>
         <DialogContent>{children}</DialogContent>
         <DialogActions>
           <Button variant="contained" onClick={handleAdd}>
