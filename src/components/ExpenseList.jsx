@@ -62,8 +62,13 @@ export default function ExpenseList() {
   };
 
   const handleSubmit = () => {
-    dispatch(updateExpense(selectedRow));
-    setmodalOpen(false);
+    if (
+      (selectedRow.description !== "" && selectedRow.category !== "",
+      selectedRow.amount !== "")
+    ) {
+      dispatch(updateExpense(selectedRow));
+      setmodalOpen(false);
+    }
   };
 
   const handleClose = () => {

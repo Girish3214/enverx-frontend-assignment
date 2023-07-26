@@ -36,9 +36,14 @@ export default function AddExpenses() {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(addExpense(newExpense));
-    setNewExpense(INITIAL_DATA);
-    setmodalOpen(false);
+    if (
+      (newExpense.description !== "" && newExpense.category !== "",
+      newExpense.amount !== "")
+    ) {
+      dispatch(addExpense(newExpense));
+      setNewExpense(INITIAL_DATA);
+      setmodalOpen(false);
+    }
   };
 
   const handleClose = () => {

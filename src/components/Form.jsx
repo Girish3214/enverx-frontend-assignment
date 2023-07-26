@@ -33,6 +33,7 @@ export default function Form({
   handleAutoComplete,
   button,
 }) {
+  console.log("cls date", expense);
   return (
     <Modal
       open={modalOpen}
@@ -51,6 +52,10 @@ export default function Form({
               id="description"
               name="description"
               autoComplete="off"
+              error={expense.description === ""}
+              helperText={
+                expense.description === "" ? "Description cannot be empty" : ""
+              }
               value={expense.description}
               onChange={(e) => handleInputChange(e)}
             />
@@ -68,7 +73,14 @@ export default function Form({
               options={EXPENSES_TYPES}
               fullWidth
               renderInput={(params) => (
-                <TextField {...params} label="Category" />
+                <TextField
+                  {...params}
+                  error={expense.category === ""}
+                  helperText={
+                    expense.category === "" ? "Category cannot be empty" : ""
+                  }
+                  label="Category"
+                />
               )}
               value={expense.category}
               onChange={(e, value) => handleAutoComplete("category", value)}
@@ -89,6 +101,8 @@ export default function Form({
                   <InputAdornment position="start">₹</InputAdornment>
                 ),
               }}
+              error={expense.amount === ""}
+              helperText={expense.amount === "" ? "Amount cannot be empty" : ""}
               value={expense.amount}
               onChange={(e) => handleInputChange(e)}
             />
@@ -107,6 +121,8 @@ export default function Form({
               id="date"
               name="date"
               type="date"
+              error={expense.date === ""}
+              helperText={expense.date === "" ? "Amount cannot be empty" : ""}
               value={dateFormat(expense.date)}
               onChange={(e) => handleInputChange(e)}
             />
